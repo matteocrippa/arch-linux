@@ -1,28 +1,12 @@
 #!/bin/bash
 
-encryption_passphrase=""
-root_password=""
-user_password=""
-hostname=""
-username=""
-continent_city=""
-swap_size="16"
+# Env variables
+. vars.sh
 
 # Set different microcode, kernel params and initramfs modules according to CPU vendor
-cpu_vendor=$(cat /proc/cpuinfo | grep vendor | uniq)
-cpu_microcode=""
-kernel_options=""
-initramfs_modules=""
-if [[ $cpu_vendor =~ "AuthenticAMD" ]]
-then
- cpu_microcode="amd-ucode"
- initramfs_modules="amdgpu"
-elif [[ $cpu_vendor =~ "GenuineIntel" ]]
-then
- cpu_microcode="intel-ucode"
- kernel_options=" i915.fastboot=1 i915.enable_fbc=1 i915.enable_guc=2"
- initramfs_modules="intel_agp i915"
-fi
+cpu_microcode="intel-ucode"
+kernel_options=" i915.fastboot=1 i915.enable_fbc=1 i915.enable_guc=2"
+initramfs_modules="intel_agp i915"
 
 echo "Updating system clock"
 timedatectl set-ntp true
@@ -31,16 +15,16 @@ echo "Syncing packages database"
 pacman -Sy --noconfirm
 
 echo "Creating partition tables"
-printf "n\n1\n4096\n+512M\nef00\nw\ny\n" | gdisk /dev/nvme0n1
-printf "n\n2\n\n\n8e00\nw\ny\n" | gdisk /dev/nvme0n1
+printf "n\n1\n4096\n+512M\nef00\nw\ny\n" | gdisk $NVME
+printf "n\n2\n\n\n8e00\nw\ny\n" | gdisk $NVME
 
 # echo "Zeroing partitions"
-# cat /dev/zero > /dev/nvme0n1p1
-# cat /dev/zero > /dev/nvme0n1p2
+# cat /dev/zero > "$NVME"p1
+# cat /dev/zero > "$NVME"p2
 
 echo "Setting up cryptographic volume"
-printf "%s" "$encryption_passphrase" | cryptsetup -h sha512 -s 512 --use-random --type luks2 luksFormat /dev/nvme0n1p2
-printf "%s" "$encryption_passphrase" | cryptsetup luksOpen /dev/nvme0n1p2 cryptlvm
+printf "%s" "$encryption_passphrase" | cryptsetup -h sha512 -s 512 --use-random --type luks2 luksFormat "$NVME"p2
+printf "%s" "$encryption_passphrase" | cryptsetup luksOpen "$NVME"p2 cryptlvm
 
 echo "Creating physical volume"
 pvcreate /dev/mapper/cryptlvm
@@ -57,16 +41,16 @@ yes | mkfs.ext4 /dev/vg0/root
 mount /dev/vg0/root /mnt
 
 echo "Setting up /boot partition"
-yes | mkfs.fat -F32 /dev/nvme0n1p1
+yes | mkfs.fat -F32 "$NVME"p1
 mkdir /mnt/boot
-mount /dev/nvme0n1p1 /mnt/boot
+mount "$NVME"p1 /mnt/boot
 
 echo "Setting up swap"
 yes | mkswap /dev/vg0/swap
 swapon /dev/vg0/swap
 
 echo "Installing Arch Linux"
-yes '' | pacstrap /mnt base base-devel linux linux-headers linux-lts linux-lts-headers linux-firmware lvm2 device-mapper e2fsprogs $cpu_microcode cryptsetup networkmanager wget man-db man-pages nano diffutils flatpak lm_sensors
+yes '' | pacstrap /mnt base base-devel linux linux-headers linux-lts linux-lts-headers linux-firmware lvm2 device-mapper e2fsprogs $cpu_microcode cryptsetup networkmanager wget man-db man-pages nano diffutils flatpak flatpak-xdg-utils-git lm_sensors
 
 echo "Generating fstab"
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -90,6 +74,11 @@ echo $hostname > /etc/hostname
 
 echo "Setting root password"
 echo -en "$root_password\n$root_password" | passwd
+
+echo "Set home key"
+echo $encrypt_key_file > /root/.ssd_key
+export PART_ID=$(blkid -o value -s UUID ${SSD}1)
+echo "crypthome UUID=${PART_ID} /root/.ssd_key luks" > /etc/crypttab
 
 echo "Creating new user"
 useradd -m -G wheel -s /bin/bash $username
@@ -121,7 +110,7 @@ title Arch Linux
 linux /vmlinuz-linux
 initrd /$cpu_microcode.img
 initrd /initramfs-linux.img
-options rd.luks.name=$(blkid -s UUID -o value /dev/nvme0n1p2)=cryptlvm root=/dev/vg0/root resume=/dev/vg0/swap rd.luks.options=discard$kernel_options nmi_watchdog=0 quiet rw
+options rd.luks.name=$(blkid -s UUID -o value "$NVME"p2)=cryptlvm root=/dev/vg0/root resume=/dev/vg0/swap rd.luks.options=discard$kernel_options nmi_watchdog=0 quiet rw
 END
 
 touch /boot/loader/entries/arch-lts.conf
@@ -130,7 +119,7 @@ title Arch Linux LTS
 linux /vmlinuz-linux-lts
 initrd /$cpu_microcode.img
 initrd /initramfs-linux-lts.img
-options rd.luks.name=$(blkid -s UUID -o value /dev/nvme0n1p2)=cryptlvm root=/dev/vg0/root resume=/dev/vg0/swap rd.luks.options=discard$kernel_options nmi_watchdog=0 quiet rw
+options rd.luks.name=$(blkid -s UUID -o value "$NVME"p2)=cryptlvm root=/dev/vg0/root resume=/dev/vg0/swap rd.luks.options=discard$kernel_options nmi_watchdog=0 quiet rw
 END
 
 echo "Updating systemd-boot"
