@@ -49,6 +49,10 @@ echo "Setting up swap"
 yes | mkswap /dev/vg0/swap
 swapon /dev/vg0/swap
 
+echo "Setting up home"
+mkdir /mnt/home
+mount /dev/vg1/home /mnt/home
+
 echo "Installing Arch Linux"
 yes '' | pacstrap /mnt base base-devel linux linux-headers linux-lts linux-lts-headers linux-firmware lvm2 device-mapper e2fsprogs $cpu_microcode cryptsetup networkmanager wget man-db man-pages nano diffutils flatpak flatpak-xdg-utils-git lm_sensors
 
