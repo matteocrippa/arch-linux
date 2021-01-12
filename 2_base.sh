@@ -289,6 +289,9 @@ alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 EOF
 
+echo "Flatpak Xdg"
+yay -S --noconfirm flatpak-xdg-utils-git
+
 echo "RClone"
 mkdir ~/GDrive
 yay -S --noconfirm rclone
