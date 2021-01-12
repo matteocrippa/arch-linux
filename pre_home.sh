@@ -11,7 +11,7 @@ dd if=/dev/urandom of=.ssd_key bs=1024 count=20
 
 echo "Setting up cryptographic volume"
 printf "%s" "$encryption_passphares_home" | cryptsetup -h sha512 -s 512 --use-random --type luks2 luksFormat "$SSD"1
-printf "%s" "$encryption_passphares_home" | cryptsetup luksAddKey "$SSD1 .ssd_key
+printf "%s" "$encryption_passphares_home" | cryptsetup luksAddKey "$SSD"1 .ssd_key
 cryptsetup --key-file .ssd_key luksOpen "$SSD"1 crypthome
 
 echo "Creating physical volume"
