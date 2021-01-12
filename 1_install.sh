@@ -79,11 +79,6 @@ echo $hostname > /etc/hostname
 echo "Setting root password"
 echo -en "$root_password\n$root_password" | passwd
 
-echo "Set home key"
-echo $encrypt_key_file > /root/.ssd_key
-export PART_ID=$(blkid -o value -s UUID ${SSD}1)
-echo "crypthome UUID=${PART_ID} /root/.ssd_key luks" > /etc/crypttab
-
 echo "Creating new user"
 useradd -m -G wheel -s /bin/bash $username
 usermod -a -G video $username
@@ -152,6 +147,10 @@ systemctl enable NetworkManager
 
 echo "Adding user as a sudoer"
 echo '%wheel ALL=(ALL) ALL' | EDITOR='tee -a' visudo
+
+echo "Set home key"
+echo "$encrypt_key_file" > /root/.ssd_key
+echo "crypthome UUID=${PART_ID} /root/.ssd_key luks" > /etc/crypttab
 EOF
 
 umount -R /mnt

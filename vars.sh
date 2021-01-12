@@ -4,6 +4,7 @@
 
 export NVME="/dev/nvme0n1"
 export SSD="/dev/sda"
+export PART_ID=$(blkid -o value -s UUID ${SSD}1)
 
 export encryption_passphrase=""
 export root_password=""
