@@ -9,6 +9,7 @@ kernel_options=" i915.fastboot=1 i915.enable_fbc=1 i915.enable_guc=2"
 initramfs_modules="intel_agp i915"
 
 echo "Configuring new system"
+
 arch-chroot /mnt /bin/bash <<EOF
 echo "Setting system clock"
 ln -sf /usr/share/zoneinfo/$continent_city /etc/localtime
@@ -42,7 +43,9 @@ mkinitcpio -p linux-lts
 
 echo "Setting up systemd-boot"
 bootctl --path=/boot install
+EOF
 
+arch-chroot /mnt /bin/bash <<EOF
 mkdir -p /boot/loader/
 echo ' ' > /boot/loader/loader.conf
 tee -a /boot/loader/loader.conf << END
@@ -87,7 +90,9 @@ Description = Updating systemd-boot
 When = PostTransaction
 Exec = /usr/bin/bootctl update
 END
+EOF
 
+arch-chroot /mnt /bin/bash <<EOF
 echo "Enabling periodic TRIM"
 systemctl enable fstrim.timer
 
@@ -96,14 +101,16 @@ systemctl enable NetworkManager
 
 echo "Adding user as a sudoer"
 echo '%wheel ALL=(ALL) ALL' | EDITOR='tee -a' visudo
+EOF
 
+arch-chroot /mnt /bin/bash <<EOF
 echo "Set home key"
 echo "$encrypt_key_file" > /root/.ssd_key
 touch /etc/crypttab
 echo "crypthome UUID=${PART_ID} /root/.ssd_key luks" > /etc/crypttab
 EOF
 
-umount -R /mnt
-swapoff -a
+#umount -R /mnt
+#swapoff -a
 
 echo "Arch Linux is ready. You can reboot now!"
