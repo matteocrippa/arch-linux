@@ -33,8 +33,8 @@ wget -P ~/.config/rofi/ "$repo_url"/dotfiles/rofi/gruvbox-light.rasi
 
 echo "Enabling sway autostart"
 touch ~/.zprofile
-tee -a ~/.zprofile << EOF
-if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+tee -a ~/.zprofile.new << EOF
+if [[ -z \$DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
     export LIBVA_DRIVER_NAME=i965
     export CLUTTER_BACKEND=wayland
     export QT_WAYLAND_DISABLE_WINDOWDECORATION=1

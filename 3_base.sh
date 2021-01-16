@@ -111,6 +111,7 @@ sudo sed -i 's/quiet rw/quiet splash loglevel=3 rd.udev.log_priority=3 vt.global
 sudo mkinitcpio -p linux
 sudo mkinitcpio -p linux-lts
 sudo plymouth-set-default-theme -R bgrt
+yay -S --noconfirm plymouth-theme-arch-logo-new
 
 echo "Improving laptop battery"
 
@@ -271,10 +272,7 @@ git config --global user.name "matteocrippa"
 git config --global user.email "matteocrippa@users.noreply.github.com"
 
 echo "Set environment variables and alias"
-touch ~/.zshrc
 tee -a ~/.zshrc << EOF
-export ZSH="$HOME/.oh-my-zsh"
-
 ## Theme
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
