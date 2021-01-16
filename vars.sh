@@ -12,7 +12,6 @@ export root_password=""
 export encryption_passphares_home=""
 export username="matteo"
 export user_password=""
-export encrypt_key_file=$(cat .ssd_key)
 
 export hostname="earth"
 export continent_city="Europe/Rome"
