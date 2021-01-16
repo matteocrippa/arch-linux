@@ -34,28 +34,28 @@ vgcreate vg0 /dev/mapper/cryptlvm
 
 echo "Creating logical volumes"
 lvcreate -L +"$swap_size"GB vg0 -n swap
-lvcreate -l +100%FREE vg0 -n root
+# lvcreate -l +100%FREE vg0 -n root
 
-echo "Setting up / partition"
-yes | mkfs.ext4 /dev/vg0/root
-mount /dev/vg0/root /mnt
+# echo "Setting up / partition"
+# yes | mkfs.ext4 /dev/vg0/root
+# mount /dev/vg0/root /mnt
 
-echo "Setting up /boot partition"
-yes | mkfs.fat -F32 "$NVME"p1
-mkdir /mnt/boot
-mount "$NVME"p1 /mnt/boot
+# echo "Setting up /boot partition"
+# yes | mkfs.fat -F32 "$NVME"p1
+# mkdir /mnt/boot
+# mount "$NVME"p1 /mnt/boot
 
-echo "Setting up swap"
-yes | mkswap /dev/vg0/swap
-swapon /dev/vg0/swap
+# echo "Setting up swap"
+# yes | mkswap /dev/vg0/swap
+# swapon /dev/vg0/swap
 
-echo "Setting up home"
-mkdir /mnt/home
-mount /dev/vg1/home /mnt/home
+# echo "Setting up home"
+# mkdir /mnt/home
+# mount /dev/vg1/home /mnt/home
 
-echo "Installing Arch Linux"
-yes '' | pacstrap /mnt base base-devel linux linux-headers linux-lts linux-lts-headers linux-firmware lvm2 device-mapper e2fsprogs $cpu_microcode cryptsetup networkmanager wget man-db man-pages nano diffutils flatpak lm_sensors
+# echo "Installing Arch Linux"
+# yes '' | pacstrap /mnt base base-devel linux linux-headers linux-lts linux-lts-headers linux-firmware lvm2 device-mapper e2fsprogs $cpu_microcode cryptsetup networkmanager wget man-db man-pages nano diffutils flatpak lm_sensors
 
-echo "Generating fstab"
-genfstab -U /mnt >> /mnt/etc/fstab
+# echo "Generating fstab"
+# genfstab -U /mnt >> /mnt/etc/fstab
 
