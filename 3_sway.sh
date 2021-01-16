@@ -3,11 +3,6 @@
 # Env variables
 . vars.sh
 
-echo "Downloading and running base script"
-wget "$repo_url"/2_base.sh
-chmod +x 2_base.sh
-sh ./2_base.sh
-
 echo "Installing sway and additional packages"
 sudo pacman -S --noconfirm sway swaylock swayidle waybar rofi light pulseaudio pavucontrol slurp grim ristretto tumbler mousepad
 
