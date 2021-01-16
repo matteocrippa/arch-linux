@@ -11,7 +11,7 @@ export root_password="changeme"
 
 export encryption_passphares_home="changemetoo"
 export username="matteo"
-export user_password="changmetoo"
+export user_password="changemetoo"
 
 export hostname="earth"
 export continent_city="Europe/Rome"
