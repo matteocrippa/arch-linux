@@ -47,14 +47,14 @@ flatpak install --user --assumeyes org.gtk.Gtk3theme.Breeze-Dark
 
 echo "Intalling Flatpaks"
 flatpak install --user --assumeyes flathub org.mozilla.firefox
-flatpak install --user --assumeyes flathub org.libreoffice.LibreOffice
-flatpak install --user --assumeyes flathub org.filezillaproject.Filezilla
-flatpak install --user --assumeyes flathub com.getpostman.Postman
-flatpak install --user --assumeyes flathub org.videolan.VLC
-flatpak install --user --assumeyes flathub org.kde.krita
-flatpak install --user --assumeyes flathub com.google.AndroidStudio
-flatpak install --user --assumeyes flathub com.visualstudio.code-oss
-flatpak install --user --assumeyes flathub com.github.tchx84.Flatseal
+# flatpak install --user --assumeyes flathub org.libreoffice.LibreOffice
+# flatpak install --user --assumeyes flathub org.filezillaproject.Filezilla
+# flatpak install --user --assumeyes flathub com.getpostman.Postman
+# flatpak install --user --assumeyes flathub org.videolan.VLC
+# flatpak install --user --assumeyes flathub org.kde.krita
+# flatpak install --user --assumeyes flathub com.google.AndroidStudio
+# flatpak install --user --assumeyes flathub com.visualstudio.code-oss
+# flatpak install --user --assumeyes flathub com.github.tchx84.Flatseal
 flatpak install --user --assumeyes flathub org.keepassxc.KeePassXC
 
 echo "Improving font rendering issues with Firecpu_vendor=$(cat /proc/cpuinfo | grep vendor | uniq)
@@ -73,17 +73,17 @@ tee -a ~/.var/app/org.mozilla.firefox/config/fontconfig/fonts.conf << EOF
 </fontconfig>	
 EOF
 
-echo "Installing chromium with GPU acceleration"
-sudo pacman -S --noconfirm chromium
-mkdir -p ~/.config/
-touch ~/.config/chromium-flags.conf
-tee -a ~/.config/chromium-flags.conf << EOF
---ignore-gpu-blacklist
---enable-gpu-rasterization
---enable-zero-copy
---enable-accelerated-video-decode
---use-vulkan
-EOF
+# echo "Installing chromium with GPU acceleration"
+# sudo pacman -S --noconfirm chromium
+# mkdir -p ~/.config/
+# touch ~/.config/chromium-flags.conf
+# tee -a ~/.config/chromium-flags.conf << EOF
+# --ignore-gpu-blacklist
+# --enable-gpu-rasterization
+# --enable-zero-copy
+# --enable-accelerated-video-decode
+# --use-vulkan
+# EOF
 
 echo "Creating user's folders"
 sudo pacman -S --noconfirm xdg-user-dirs
@@ -239,10 +239,6 @@ _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp'
 JAVA_FONTS=/usr/share/fonts/TTF
 EOF
 
-echo "Enabling bluetooth"
-sudo systemctl enable bluetooth.service
-sudo systemctl start bluetooth.service
-
 echo "Disabling root (still allows sudo)"
 passwd --lock root
 
@@ -291,5 +287,5 @@ echo "Flatpak Xdg"
 yay -S --noconfirm flatpak-xdg-utils-git
 
 echo "RClone"
-mkdir ~/GDrive
-yay -S --noconfirm rclone
+# mkdir ~/GoogleDrive
+# yay -S --noconfirm rclone

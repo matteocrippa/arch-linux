@@ -17,6 +17,7 @@ wget -P ~/.config/waybar/ "$repo_url"/dotfiles/waybar/style.css
 mkdir -p ~/.config/script
 wget -P ~/.config/waybar/script/ "$repo_url"/dotfiles/waybar/script/wbm_battery0
 wget -P ~/.config/waybar/script/ "$repo_url"/dotfiles/waybar/script/wbm_battery1
+chmod +x ~/.config/waybar/script/wbm_battery0 ~/.config/waybar/script/wbm_battery1
 
 echo "Ricing rofi"
 mkdir -p ~/.config/rofi
@@ -33,6 +34,7 @@ wget -P ~/.config/rofi/ "$repo_url"/dotfiles/rofi/gruvbox-light.rasi
 
 echo "Enabling sway autostart"
 touch ~/.zprofile
+touch ~/.zprofile.new
 tee -a ~/.zprofile.new << EOF
 if [[ -z \$DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
     export LIBVA_DRIVER_NAME=i965
