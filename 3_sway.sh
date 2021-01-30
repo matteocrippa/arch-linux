@@ -34,8 +34,7 @@ wget -P ~/.config/rofi/ "$repo_url"/dotfiles/rofi/gruvbox-light.rasi
 
 echo "Enabling sway autostart"
 touch ~/.zprofile
-touch ~/.zprofile.new
-tee -a ~/.zprofile.new << EOF
+tee -a ~/.zprofile << EOF
 if [[ -z \$DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
     export LIBVA_DRIVER_NAME=i965
     export CLUTTER_BACKEND=wayland
@@ -106,7 +105,7 @@ echo "Installing xwayland"
 sudo pacman -S --noconfirm xorg-server-xwayland
 
 echo "Installing wdisplays"
-yay -S --noconfirm wdisplays-git wf-recorder lxsession
+yay -S --noconfirm wdisplays-git lxsession
 
 echo "Setting some default applications"
 xdg-mime default ristretto.desktop image/jpeg

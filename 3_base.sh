@@ -47,14 +47,15 @@ flatpak install --user --assumeyes org.gtk.Gtk3theme.Breeze-Dark
 
 echo "Intalling Flatpaks"
 flatpak install --user --assumeyes flathub org.mozilla.firefox
-# flatpak install --user --assumeyes flathub org.libreoffice.LibreOffice
-# flatpak install --user --assumeyes flathub org.filezillaproject.Filezilla
-# flatpak install --user --assumeyes flathub com.getpostman.Postman
-# flatpak install --user --assumeyes flathub org.videolan.VLC
-# flatpak install --user --assumeyes flathub org.kde.krita
-# flatpak install --user --assumeyes flathub com.google.AndroidStudio
-# flatpak install --user --assumeyes flathub com.visualstudio.code-oss
-# flatpak install --user --assumeyes flathub com.github.tchx84.Flatseal
+flatpak install --user --assumeyes flathub org.libreoffice.LibreOffice
+flatpak install --user --assumeyes flathub org.filezillaproject.Filezilla
+flatpak install --user --assumeyes flathub com.getpostman.Postman
+flatpak install --user --assumeyes flathub org.videolan.VLC
+flatpak install --user --assumeyes flathub org.kde.krita
+flatpak install --user --assumeyes flathub com.google.AndroidStudio
+flatpak install --user --assumeyes flathub com.visualstudio.code-oss
+flatpak install --user --assumeyes flathub com.github.tchx84.Flatseal
+flatpak install --user --assumeyes flathub org.keepassxc.KeePassXC
 flatpak install --user --assumeyes flathub org.keepassxc.KeePassXC
 
 echo "Improving font rendering issues with Firecpu_vendor=$(cat /proc/cpuinfo | grep vendor | uniq)
@@ -286,6 +287,9 @@ EOF
 echo "Flatpak Xdg"
 yay -S --noconfirm flatpak-xdg-utils-git
 
+echo "OBS studio"
+yay -S --noconfirm obs-studio-wayland
+
 echo "RClone"
-# mkdir ~/GoogleDrive
-# yay -S --noconfirm rclone
+mkdir ~/GoogleDrive
+yay -S --noconfirm rclone
