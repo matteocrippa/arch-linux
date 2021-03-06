@@ -15,6 +15,7 @@ vim vars.sh
 
 If testing on vmware you need to:
 
+- add in vmware a NVME disk
 - enable efi firmware editing `.vmx` and adding `firmware = "efi"`
 - lower swap size to 1GB
 
