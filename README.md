@@ -15,29 +15,8 @@ vim vars.sh
 
 If testing on vmware you need to:
 
-- enable efi firmware editing `.vmx` and adding `firmware = 'efi'`
+- enable efi firmware editing `.vmx` and adding `firmware = "efi"`
 - lower swap size to 1GB
-
-## Install script
-
-- LVM on LUKS
-- LUKS2
-- systemd-boot (with Pacman hook for automatic updates)
-- systemd init hooks (instead of busybox)
-- SSD Periodic TRIM
-- Intel/AMD microcode
-- Standard Kernel + LTS kernel as fallback
-- Hibernate support
-- Kernel: LZ4 compression
-- NMI watchdog disabled
-
-### Requirements
-
-- UEFI mode
-- NVMe SSD
-- TRIM compatible SSD
-- CPU: Intel (Skylake or newer) / AMD
-- GPU: AMDGPU - only if CPU vendor is AMD (this combination is hard-coded. For now, base script checks for CPU vendor and if it's AMD, then it'll also install required drivers for AMD GPU)
 
 ### Partitions
 
@@ -49,23 +28,6 @@ If testing on vmware you need to:
 | &nbsp;&nbsp;&nbsp;└─cryptlvm                         | crypt |            |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─vg0-swap |  lvm  |   [SWAP]   |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─vg0-root |  lvm  |     /      |
-
-## Post install script
-
-- KDE / Gnome / Sway (separate scripts)
-- UFW (deny incoming, allow outgoing)
-- Automatic login
-- Fonts
-- Wallpapers
-- Multilib
-- yay (AUR helper)
-- Plymouth
-- Flatpak support
-- Lutris with Wine support (commented)
-- Syncthing
-- Browsers:
-  - Chromium: hardware acceleration enabled
-  - Firefox: via Flatpak, with hardware acceleration enabled (see below: MISC - Firefox required configs for VA-API support)
 
 ## Installation guide
 
@@ -136,53 +98,4 @@ mount /dev/nvme0n1p1 /mnt/boot
 cryptsetup luksOpen /dev/nvme0n1p2 cryptlvm
 mount /dev/vg0/root /mnt
 arch-chroot /mnt
-```
-
-### How to setup Github with SSH Key
-
-```
-git config --global user.email "Github external email"
-git config --global user.name "Github username"
-ssh-keygen -t rsa -b 4096 -C "Github email"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_rsa
-copy SSH key and add to Github (eg. vim ~/.ssh/id_rsa.pub and copy content into github.com)
-```
-
-### How to install Lutris and Steam (Flatpak)
-
-```
-# Sources:
-# https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/wikis/Mesa-git
-# https://github.com/GloriousEggroll/proton-ge-custom#flatpak
-# https://github.com/flathub/net.lutris.Lutris
-
-# Add Flatpak repos
-flatpak remote-add --user --assumeyes --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak remote-add --user --assumeyes --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-flatpak update --appstream
-
-# Install mesa-git
-flatpak install --user --assumeyes flathub-beta org.freedesktop.Platform.GL.mesa-git//20.08 org.freedesktop.Platform.GL32.mesa-git//20.08
-
-# Install Lutris
-flatpak install --user --assumeyes flathub-beta net.lutris.Lutris//beta
-flatpak install --user --assumeyes flathub org.gnome.Platform.Compat.i386 org.freedesktop.Platform.GL32.default org.freedesktop.Platform.GL.default
-
-# Install Steam
-flatpak install --user --assumeyes flathub com.valvesoftware.Steam
-
-# Make Steam use mesa-git
-sudo sed -i "s,Exec=,Exec=env FLATPAK_GL_DRIVERS=mesa-git ," /var/lib/flatpak/exports/share/applications/com.valvesoftware.Steam.desktop
-
-# Download latest release from GloriousEggroll/proton-ge-custom and move it to Steam Flatpak
-curl -Ls https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep -wo "https.*tar.gz" | wget -qi -
-mkdir -p ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/
-tar -xzf Proton-* -C ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/
-
-# To enable proton ge: https://github.com/GloriousEggroll/proton-ge-custom#enabling
-
-# Allow Steam Link through the Firewall
-sudo ufw allow from 192.168.1.0/24 to any port 27036:27037 proto tcp
-sudo ufw allow from 192.168.1.0/24 to any port 27031:27036 proto udp
 ```
