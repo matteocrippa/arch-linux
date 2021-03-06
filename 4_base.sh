@@ -56,7 +56,6 @@ flatpak install --user --assumeyes flathub com.google.AndroidStudio
 flatpak install --user --assumeyes flathub com.visualstudio.code-oss
 flatpak install --user --assumeyes flathub com.github.tchx84.Flatseal
 flatpak install --user --assumeyes flathub org.keepassxc.KeePassXC
-flatpak install --user --assumeyes flathub org.keepassxc.KeePassXC
 
 echo "Improving font rendering issues with Firecpu_vendor=$(cat /proc/cpuinfo | grep vendor | uniq)
 fox Flatpak"
