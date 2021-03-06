@@ -15,10 +15,8 @@ vim vars.sh
 
 If testing on vmware you need to:
 
-- activate efi firmware
-- lower swap size
-
-Note: These scripts are not meant to be another full-fledged Arch installer. They are made to fit my devices: Dell XPS 7390 and custom desktop build (Ryzen 3700X and RX 5700XT). In any case, as long as you don't use a Nvidia GPU, they should work fine.
+- enable efi firmware editing `.vmx` and adding `firmware = 'efi'`
+- lower swap size to 1GB
 
 ## Install script
 
