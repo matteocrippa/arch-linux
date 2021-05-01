@@ -29,6 +29,10 @@ If testing on vmware you need to:
 | &nbsp;&nbsp;&nbsp;└─cryptlvm                         | crypt |            |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─vg0-swap |  lvm  |   [SWAP]   |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─vg0-root |  lvm  |     /      |
+| sda                                                  | disk  |            |
+| ├─sda1                                               | part  |            |
+| &nbsp;&nbsp;&nbsp;└─cryptlvm                         | crypt |            |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─vg1-home |  lvm  |     /home  |
 
 ## Installation guide
 
